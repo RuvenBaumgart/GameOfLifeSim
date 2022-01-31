@@ -28,14 +28,6 @@ public class Game {
         System.out.println("----\n");
     }
 
-    public void setAlive(int x, int y){
-        this.board[x][y] = 1;
-    }
-
-    public void setDead(int x , int y){
-        this.board[x][y] = 0;
-    }
-
     public int countAllAliveNeightbours(int x, int y){
         int result = 0;
         result += alive(x - 1, y - 1);
@@ -62,6 +54,27 @@ public class Game {
         }
         return this.board[x][y];
     }
+
+    public void setAlive(int x, int y){
+        this.setState(x,y,1);
+    }
+
+    public void setDead(int x , int y){
+        this.setState(x,y,1);
+    }
+
+    public void setState(int x , int y, int state){
+        if(x < 0 || x >= width){
+            return;
+        }
+
+        if( y >= height || y < 0){
+            return ;
+        }
+
+        this.board[x][y] = state;
+    }
+
 
     public void step(){
         int[][] newBoard = new int[width][height];
@@ -98,18 +111,4 @@ public class Game {
         return board;
     }
 
-    public static void main(String[] args) {
-        Game game = new Game(8,5);
-
-        game.setAlive(2,3);
-        game.setAlive(3,3);
-        game.setAlive(4,3);
-
-        game.printBoard();
-
-        game.step();
-        game.printBoard();
-        game.step();
-        game.printBoard();
-    }
 }
