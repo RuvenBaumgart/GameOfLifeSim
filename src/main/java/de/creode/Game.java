@@ -1,10 +1,9 @@
 package de.creode;
 
 public class Game {
-
     private int height;
     private int width;
-    int[][] board;
+    private int[][] board;
 
     public Game(int height, int width) {
         this.height = height;
@@ -85,6 +84,18 @@ public class Game {
             }
         }
         this.board = newBoard;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int[][] getBoard() {
+        return board;
     }
 
     public static void main(String[] args) {
