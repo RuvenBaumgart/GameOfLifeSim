@@ -1,6 +1,9 @@
 package de.creode;
 
 public class Game {
+
+    public static final int ALIVE = 1;
+    public static final int DEAD = 0;
     private int height;
     private int width;
     private int[][] board;
@@ -11,12 +14,25 @@ public class Game {
         this.board = new int[width][height];
     }
 
+    public static Game copy(Game game){
+        Game copy = new Game(game.getHeight(), game.getWidth());
+        for (int i = 0; i < game.getWidth() ; i++) {
+            for (int j = 0; j < game.getHeight(); j++) {
+                copy.setState(i,j, game.getCondition(i,j));
+            }
+
+        }
+        return copy;
+    }
+
+
+
     public void printBoard(){
         System.out.println("----");
         for (int i = 0; i < width; i++) {
             String line = "|";
             for (int j = 0; j < height; j++) {
-                if (this.board[i][j] == 0) {
+                if (this.board[i][j] == DEAD) {
                     line += "*";
                 } else {
                     line += "0";
@@ -30,21 +46,21 @@ public class Game {
 
     public int countAllAliveNeightbours(int x, int y){
         int result = 0;
-        result += alive(x - 1, y - 1);
-        result += alive(x , y - 1);
-        result += alive(x + 1, y - 1);
+        result += getCondition(x - 1, y - 1);
+        result += getCondition(x , y - 1);
+        result += getCondition(x + 1, y - 1);
 
-        result += alive(x - 1, y );
-        result += alive(x + 1, y );
+        result += getCondition(x - 1, y );
+        result += getCondition(x + 1, y );
 
-        result += alive(x - 1, y + 1);
-        result += alive(x , y + 1);
-        result += alive(x + 1, y + 1);
+        result += getCondition(x - 1, y + 1);
+        result += getCondition(x , y + 1);
+        result += getCondition(x + 1, y + 1);
         return result;
     }
 
 
-    public int alive(int x, int y){
+    public int getCondition(int x, int y){
         if(x < 0 || x >= width){
             return 0;
         }
@@ -56,11 +72,11 @@ public class Game {
     }
 
     public void setAlive(int x, int y){
-        this.setState(x,y,1);
+        this.setState(x,y,ALIVE);
     }
 
     public void setDead(int x , int y){
-        this.setState(x,y,1);
+        this.setState(x,y,DEAD);
     }
 
     public void setState(int x , int y, int state){
@@ -81,13 +97,13 @@ public class Game {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 int neightbours = countAllAliveNeightbours(i,j);
-                if(alive(i,j) == 1){
+                if(getCondition(i,j) == 1){
                     if(neightbours < 2){
-                        newBoard[i][j] = 0;
+                        newBoard[i][j] = DEAD;
                     } else if(neightbours == 2 || neightbours == 3){
-                        newBoard[i][j] = 1;
+                        newBoard[i][j] = ALIVE;
                     } else if(neightbours > 3){
-                        newBoard[i][j] = 0;
+                        newBoard[i][j] = DEAD;
                     }
                 } else {
                     if(neightbours == 3){
