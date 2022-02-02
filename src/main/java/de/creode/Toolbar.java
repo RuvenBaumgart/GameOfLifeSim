@@ -1,12 +1,15 @@
 package de.creode;
 
+import de.creode.model.CellState;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Cell;
 import javafx.scene.control.ToolBar;
 
 public class Toolbar extends ToolBar {
 
     private MainView mainView;
+    private Simulator simulator;
 
     public Toolbar(MainView mainView) {
         this.mainView = mainView;
@@ -34,30 +37,32 @@ public class Toolbar extends ToolBar {
 
     private void handleStart(ActionEvent actionEvent) {
         this.mainView.setState(MainView.SIMULATING);
-        this.mainView.getSimulator().start();
+        this.simulator = new Simulator(this.mainView.getSimulation(), this.mainView);
+        this.simulator.start();
     }
 
     private void handleStop(ActionEvent actionEvent) {
-        this.mainView.getSimulator().stop();
+        this.simulator.stop();
     }
 
     private void handleReset(ActionEvent actionEvent) {
         this.mainView.setState(MainView.EDITING);
+        this.simulator = null;
         this.mainView.draw();
     }
 
     private void handleStep(ActionEvent actionEvent) {
         this.mainView.setState(MainView.SIMULATING);
-        this.mainView.getGame().step();
+        this.mainView.getSimulation().step();
         this.mainView.draw();
     }
 
     private void handleErase(ActionEvent actionEvent) {
-        this.mainView.setDrawMode(Game.DEAD);
+        this.mainView.setDrawMode(CellState.DEAD);
     }
 
     private void handleDraw(ActionEvent actionEvent) {
-        this.mainView.setDrawMode(Game.ALIVE);
+        this.mainView.setDrawMode(CellState.ALIVE);
     }
 
 

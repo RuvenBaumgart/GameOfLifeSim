@@ -1,11 +1,14 @@
 package de.creode;
 
+import de.creode.model.Board;
+import de.creode.model.BoundedBoard;
+import de.creode.model.CellState;
+import de.creode.model.StandardRule;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.control.Cell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -23,23 +26,21 @@ public class MainView extends VBox {
     private static final int C_WIDTH = 600;
     private static final int B_HEIGHT = 60;
     private static final int B_WIDTH = 60;
+    private Simulation game;
     private Button stepButton;
     private Canvas canvas;
-    private Game gameToEdit;
-    private Game gameToSim;
+
+    private Simulation simulation;
+    private Board initalBoard;
+
+
     private Affine affine;
-    private int drawMode = Game.ALIVE;
+    private CellState drawMode = CellState.ALIVE;
     private Infobar infobar;
+
     private static int appState = EDITING;
 
-    private Simulator simulator;
-
-    public Simulator getSimulator() {
-        return simulator;
-    }
-
     public MainView() {
-
         this.canvas = new Canvas(C_HEIGHT, C_WIDTH);
         this.canvas.setOnMouseClicked(this::handleMouseDraw);
         this.canvas.setOnMouseDragged(this::handleMouseDraw);
@@ -55,12 +56,10 @@ public class MainView extends VBox {
         this.infobar.setCursorPosFormat(0,0);
 
         Toolbar toolbar = new Toolbar(this);
-
         this.getChildren().addAll(toolbar, this.canvas, spacer, this.infobar);
 
-        this.gameToEdit = new Game(B_HEIGHT, B_WIDTH);
-        this.gameToSim = Game.copy(gameToEdit);
-        this.simulator = new Simulator(this.gameToSim, this);
+        this.initalBoard = new BoundedBoard(B_HEIGHT, B_WIDTH);
+
 
         this.affine = new Affine();
         this.affine.appendScale(C_HEIGHT/B_HEIGHT,C_WIDTH/B_WIDTH);
@@ -74,7 +73,7 @@ public class MainView extends VBox {
     }
 
 
-    public void setDrawMode(int mode){
+    public void setDrawMode(CellState mode){
         this.drawMode = mode;
         this.infobar.setDrawMode(mode);
     }
@@ -86,9 +85,7 @@ public class MainView extends VBox {
         Point2D simCoordinates = getSimulationCoordinates(mouseEvent);
         int mouseSimX = (int)simCoordinates.getX();
         int mouseSimY = (int)simCoordinates.getY();
-
-        this.gameToEdit.setState(mouseSimX, mouseSimY, drawMode);
-
+        this.initalBoard.setState(mouseSimX, mouseSimY, drawMode);
         draw();
     }
 
@@ -107,36 +104,31 @@ public class MainView extends VBox {
         gc.setTransform(this.affine);
 
         if(appState == MainView.EDITING){
-            drawGame(gameToEdit);
+            drawBoard(initalBoard);
         } else {
-            drawGame(gameToSim);
+            drawBoard(this.simulation.getBoard());
         }
     }
 
-    private void drawGame (Game drawGame){
+    private void drawBoard (Board board){
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
         gc.setFill(Color.BLACK);
-        for (int i = 0; i < drawGame.getWidth() ; i++) {
-            for (int j = 0; j < drawGame.getHeight(); j++) {
-                if(drawGame.getBoard()[i][j] == Game.ALIVE){
+        for (int i = 0; i < board.getWidth() ; i++) {
+            for (int j = 0; j < board.getHeigth(); j++) {
+                if(board.getState(i,j) == CellState.ALIVE){
                     gc.fillRect(i, j, 1, 1 );
                 }
             }
         }
         gc.setStroke(Color.GRAY);
         gc.setLineWidth(0.05d);
-        for (int i = 0; i <= drawGame.getWidth(); i++) {
+        for (int i = 0; i <= board.getWidth(); i++) {
             gc.strokeLine(i,0, i,B_WIDTH);
         }
 
-        for (int i = 0; i <= drawGame.getHeight(); i++) {
+        for (int i = 0; i <= board.getHeigth(); i++) {
             gc.strokeLine(0, i, B_HEIGHT, i);
         }
-    }
-
-
-    public Game getGame() {
-        return this.gameToSim;
     }
 
     public void setState(int newState){
@@ -145,9 +137,12 @@ public class MainView extends VBox {
         }
 
         if(newState == MainView.SIMULATING){
-            this.gameToSim = Game.copy(gameToEdit);
-            this.simulator = new Simulator(this.gameToSim, this);
+           this.simulation = new Simulation(this.initalBoard, new StandardRule());
         }
         appState = newState;
+    }
+
+    public Simulation getSimulation(){
+        return this.simulation;
     }
 }

@@ -1,5 +1,7 @@
 package de.creode;
 
+import de.creode.model.CellState;
+import javafx.scene.control.Cell;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -23,9 +25,9 @@ public class Infobar extends HBox {
         this.getChildren().addAll(this.cursor, spacer, this.editingTool);
     }
 
-    public void setDrawMode(int drawMode){
+    public void setDrawMode(CellState drawMode){
         String drawModeString;
-        if(drawMode == Game.ALIVE){
+        if(drawMode == CellState.ALIVE){
             drawModeString = "Drawing";
         } else {
             drawModeString = "Erasing";
