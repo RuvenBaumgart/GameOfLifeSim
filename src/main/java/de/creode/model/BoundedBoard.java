@@ -29,11 +29,11 @@ public class BoundedBoard implements Board{
 
     @Override
     public void setState(int x, int y, CellState state) {
-        if(x < 0 || x >= width){
+        if(x < 0 || x >= height){
             return;
         }
 
-        if( y >= height || y < 0){
+        if( y >= width || y < 0){
             return ;
         }
 
@@ -42,11 +42,11 @@ public class BoundedBoard implements Board{
 
     @Override
     public CellState getState(int x, int y) {
-        if(x < 0 || x >= width){
+        if(x < 0 || x >= height){
             return CellState.DEAD;
         }
 
-        if( y >= height || y < 0){
+        if( y >= width || y < 0){
             return CellState.DEAD;
         }
         return this.board[x][y];
