@@ -1,5 +1,7 @@
 package de.creode;
 
+import de.creode.viewModel.ApplicationState;
+import de.creode.viewModel.ApplicationViewModel;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -10,7 +12,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        MainView mainView = new MainView();
+        ApplicationViewModel applicationViewModel = new ApplicationViewModel(ApplicationState.EDITING);
+        MainView mainView = new MainView(applicationViewModel);
         Scene scene = new Scene(mainView, 740, 660);
         stage.setScene(scene);
         stage.show();

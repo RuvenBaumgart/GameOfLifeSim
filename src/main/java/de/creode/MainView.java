@@ -4,11 +4,11 @@ import de.creode.model.Board;
 import de.creode.model.BoundedBoard;
 import de.creode.model.CellState;
 import de.creode.model.StandardRule;
+import de.creode.viewModel.ApplicationState;
+import de.creode.viewModel.ApplicationViewModel;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Cell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -18,33 +18,29 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 
 public class MainView extends VBox {
-
-    public static final int SIMULATING = 1;
-    public static final int EDITING = 0;
-
     private static final int C_HEIGHT = 600;
     private static final int C_WIDTH = 600;
     private static final int B_HEIGHT = 60;
     private static final int B_WIDTH = 60;
-    private Simulation game;
-    private Button stepButton;
-    private Canvas canvas;
 
+    private Canvas canvas;
     private Simulation simulation;
     private Board initalBoard;
-
-
     private Affine affine;
     private CellState drawMode = CellState.ALIVE;
     private Infobar infobar;
+    private ApplicationViewModel appViewModel;
+    private boolean isDrawingEnabled = true;
+    private boolean drawInitialBoard = true;
 
-    private static int appState = EDITING;
-
-    public MainView() {
+    public MainView(ApplicationViewModel viewModel) {
         this.canvas = new Canvas(C_HEIGHT, C_WIDTH);
         this.canvas.setOnMouseClicked(this::handleMouseDraw);
         this.canvas.setOnMouseDragged(this::handleMouseDraw);
         this.canvas.setOnMouseMoved(this::handleMouseMoved);
+
+        this.appViewModel = viewModel;
+        this.appViewModel.listenToAppState(this::onApplicationStateChanged);
 
         Pane spacer = new Pane();
         spacer.setMinSize(0,0);
@@ -55,7 +51,7 @@ public class MainView extends VBox {
         this.infobar.setDrawMode(this.drawMode);
         this.infobar.setCursorPosFormat(0,0);
 
-        Toolbar toolbar = new Toolbar(this);
+        Toolbar toolbar = new Toolbar(this, this.appViewModel);
         this.getChildren().addAll(toolbar, this.canvas, spacer, this.infobar);
 
         this.initalBoard = new BoundedBoard(B_HEIGHT, B_WIDTH);
@@ -78,8 +74,23 @@ public class MainView extends VBox {
         this.infobar.setDrawMode(mode);
     }
 
+    private void  onApplicationStateChanged(ApplicationState newState){
+        if(newState == ApplicationState.EDITING){
+            this.isDrawingEnabled = true;
+            this.drawInitialBoard = true;
+        } else if(newState == ApplicationState.SIMULATING){
+            this.isDrawingEnabled = false;
+            this.drawInitialBoard = false;
+            this.simulation = new Simulation(this.initalBoard, new StandardRule());
+        } else {
+            throw new IllegalArgumentException( "Unsupported Application state " + newState);
+        }
+
+
+    }
+
     private void handleMouseDraw(MouseEvent mouseEvent) {
-        if(appState == SIMULATING){
+        if(!isDrawingEnabled){
             return;
         }
         Point2D simCoordinates = getSimulationCoordinates(mouseEvent);
@@ -103,7 +114,7 @@ public class MainView extends VBox {
         gc.fillRect(0,0,C_HEIGHT,C_WIDTH);
         gc.setTransform(this.affine);
 
-        if(appState == MainView.EDITING){
+        if(drawInitialBoard){
             drawBoard(initalBoard);
         } else {
             drawBoard(this.simulation.getBoard());
@@ -131,16 +142,6 @@ public class MainView extends VBox {
         }
     }
 
-    public void setState(int newState){
-        if(newState == appState){
-            return;
-        }
-
-        if(newState == MainView.SIMULATING){
-           this.simulation = new Simulation(this.initalBoard, new StandardRule());
-        }
-        appState = newState;
-    }
 
     public Simulation getSimulation(){
         return this.simulation;

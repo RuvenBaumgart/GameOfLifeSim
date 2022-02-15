@@ -1,6 +1,8 @@
 package de.creode;
 
 import de.creode.model.CellState;
+import de.creode.viewModel.ApplicationState;
+import de.creode.viewModel.ApplicationViewModel;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Cell;
@@ -10,9 +12,11 @@ public class Toolbar extends ToolBar {
 
     private MainView mainView;
     private Simulator simulator;
+    private ApplicationViewModel applicationViewModel;
 
-    public Toolbar(MainView mainView) {
+    public Toolbar(MainView mainView, ApplicationViewModel applicationViewModel) {
         this.mainView = mainView;
+        this.applicationViewModel = applicationViewModel;
         Button draw = new Button("Draw");
         draw.setOnAction(this::handleDraw);
 
@@ -36,7 +40,7 @@ public class Toolbar extends ToolBar {
     }
 
     private void handleStart(ActionEvent actionEvent) {
-        this.mainView.setState(MainView.SIMULATING);
+        this.applicationViewModel.setCurrentState(ApplicationState.SIMULATING);
         this.simulator = new Simulator(this.mainView.getSimulation(), this.mainView);
         this.simulator.start();
     }
@@ -46,13 +50,14 @@ public class Toolbar extends ToolBar {
     }
 
     private void handleReset(ActionEvent actionEvent) {
-        this.mainView.setState(MainView.EDITING);
+        this.applicationViewModel.setCurrentState(ApplicationState.EDITING);
         this.simulator = null;
         this.mainView.draw();
     }
 
     private void handleStep(ActionEvent actionEvent) {
-        this.mainView.setState(MainView.SIMULATING);
+        this.applicationViewModel.setCurrentState(ApplicationState.SIMULATING);
+        this.simulator = new Simulator(this.mainView.getSimulation(), this.mainView);
         this.mainView.getSimulation().step();
         this.mainView.draw();
     }
