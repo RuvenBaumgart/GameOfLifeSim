@@ -4,10 +4,7 @@ import de.creode.model.Board;
 import de.creode.model.BoundedBoard;
 import de.creode.model.CellState;
 import de.creode.model.StandardRule;
-import de.creode.viewModel.ApplicationState;
-import de.creode.viewModel.ApplicationViewModel;
-import de.creode.viewModel.BoardViewModel;
-import de.creode.viewModel.EditorViewModel;
+import de.creode.viewModel.*;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -28,8 +25,9 @@ public class MainView extends VBox {
     private ApplicationViewModel appViewModel;
     private BoardViewModel boardViewModel;
     private EditorViewModel editorViewModel;
+    private SimulationViewModel simulationViewModel;
 
-    public MainView(ApplicationViewModel viewModel, BoardViewModel boardViewModel, EditorViewModel editorViewModel) {
+    public MainView(ApplicationViewModel viewModel, BoardViewModel boardViewModel, EditorViewModel editorViewModel, SimulationViewModel simulationViewModel) {
         this.canvas = new Canvas(C_HEIGHT, C_WIDTH);
         this.canvas.setOnMouseClicked(this::handleMouseDraw);
         this.canvas.setOnMouseDragged(this::handleMouseDraw);
@@ -39,7 +37,7 @@ public class MainView extends VBox {
         this.appViewModel = viewModel;
         this.boardViewModel = boardViewModel;
         this.boardViewModel.listenToBoard(this::onBoardChanged);
-
+        this.simulationViewModel = simulationViewModel;
         Pane spacer = new Pane();
         spacer.setMinSize(0,0);
         spacer.setMaxSize(Double.MAX_VALUE,Double.MAX_VALUE);
@@ -49,7 +47,7 @@ public class MainView extends VBox {
 
         this.infobar.setCursorPosFormat(0,0);
 
-        Toolbar toolbar = new Toolbar(this.editorViewModel, this.appViewModel, this.boardViewModel);
+        Toolbar toolbar = new Toolbar(this.editorViewModel, this.appViewModel, this.simulationViewModel );
         this.getChildren().addAll(toolbar, this.canvas, spacer, this.infobar);
 
         this.affine = new Affine();
