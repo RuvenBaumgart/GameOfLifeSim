@@ -1,5 +1,6 @@
 package de.creode;
 
+import de.creode.viewModel.BoardViewModel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -7,19 +8,19 @@ import javafx.util.Duration;
 
 public class Simulator {
     private Simulation simulation;
-    private MainView mainView;
     private Timeline timeline;
+    private BoardViewModel boardViewModel;
 
-    public Simulator(Simulation simulation, MainView mainView) {
+    public Simulator(Simulation simulation, BoardViewModel boardViewModel) {
         this.simulation = simulation;
-        this.mainView = mainView;
-        timeline = new Timeline(new KeyFrame(Duration.millis(200), this::doSimulation));
+        this.boardViewModel = boardViewModel;
+        timeline = new Timeline(new KeyFrame(Duration.millis(200), event -> this.doSimulation()));
         timeline.setCycleCount(Timeline.INDEFINITE);
     }
 
-    private void doSimulation(ActionEvent actionEvent) {
+    public void doSimulation() {
         this.simulation.step();
-        this.mainView.draw();
+        this.boardViewModel.setBoard(this.simulation.getBoard());
     }
 
     public void start(){

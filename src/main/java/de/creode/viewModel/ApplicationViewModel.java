@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ApplicationViewModel {
     private ApplicationState currentState;
-    private List<ISimpleStateListener<ApplicationState>> appStateListeners;
+    private List<ISimpleChangeListener<ApplicationState>> appStateListeners;
 
 
     public ApplicationViewModel(ApplicationState currentState){
@@ -13,7 +13,7 @@ public class ApplicationViewModel {
         this.appStateListeners = new LinkedList<>();
     }
 
-    public void listenToAppState(ISimpleStateListener<ApplicationState> listener){
+    public void listenToAppState(ISimpleChangeListener<ApplicationState> listener){
         this.appStateListeners.add(listener);
     }
 
@@ -25,7 +25,7 @@ public class ApplicationViewModel {
     }
 
     private void notifyAppStateListeners() {
-        for (ISimpleStateListener appStateListener : appStateListeners) {
+        for (ISimpleChangeListener appStateListener : appStateListeners) {
             appStateListener.valueChanged(currentState);
         }
     }

@@ -1,5 +1,5 @@
 package de.creode.viewModel;
 
-public interface ISimpleStateListener <T> {
+public interface ISimpleChangeListener<T> {
     void valueChanged(T value);
 }

@@ -1,6 +1,5 @@
 package de.creode.viewModel;
 
-import de.creode.App;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +28,7 @@ class ApplicationViewModelTest {
         assertEquals(ApplicationState.EDITING, appListener.state);
     }
 
-   private static class ApplicationStateListener implements ISimpleStateListener<ApplicationState> {
+   private static class ApplicationStateListener implements ISimpleChangeListener<ApplicationState> {
         public ApplicationState state = ApplicationState.EDITING;
         @Override
         public void valueChanged(ApplicationState newState) {

@@ -1,8 +1,11 @@
 package de.creode;
 
+import de.creode.model.Board;
 import de.creode.model.CellState;
+import de.creode.model.StandardRule;
 import de.creode.viewModel.ApplicationState;
 import de.creode.viewModel.ApplicationViewModel;
+import de.creode.viewModel.BoardViewModel;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Cell;
@@ -13,9 +16,10 @@ public class Toolbar extends ToolBar {
     private MainView mainView;
     private Simulator simulator;
     private ApplicationViewModel applicationViewModel;
-
-    public Toolbar(MainView mainView, ApplicationViewModel applicationViewModel) {
+    private BoardViewModel boardViewModel;
+    public Toolbar(MainView mainView, ApplicationViewModel applicationViewModel, BoardViewModel boardViewModel) {
         this.mainView = mainView;
+        this.boardViewModel = boardViewModel;
         this.applicationViewModel = applicationViewModel;
         Button draw = new Button("Draw");
         draw.setOnAction(this::handleDraw);
@@ -40,8 +44,7 @@ public class Toolbar extends ToolBar {
     }
 
     private void handleStart(ActionEvent actionEvent) {
-        this.applicationViewModel.setCurrentState(ApplicationState.SIMULATING);
-        this.simulator = new Simulator(this.mainView.getSimulation(), this.mainView);
+        changeToSimulationState();
         this.simulator.start();
     }
 
@@ -52,14 +55,17 @@ public class Toolbar extends ToolBar {
     private void handleReset(ActionEvent actionEvent) {
         this.applicationViewModel.setCurrentState(ApplicationState.EDITING);
         this.simulator = null;
-        this.mainView.draw();
     }
 
     private void handleStep(ActionEvent actionEvent) {
+        changeToSimulationState();
+        this.simulator.doSimulation();
+    }
+
+    private void changeToSimulationState(){
         this.applicationViewModel.setCurrentState(ApplicationState.SIMULATING);
-        this.simulator = new Simulator(this.mainView.getSimulation(), this.mainView);
-        this.mainView.getSimulation().step();
-        this.mainView.draw();
+        Simulation simulation = new Simulation(boardViewModel.getBoard(), new StandardRule());
+        this.simulator = new Simulator(simulation, this.boardViewModel);
     }
 
     private void handleErase(ActionEvent actionEvent) {
