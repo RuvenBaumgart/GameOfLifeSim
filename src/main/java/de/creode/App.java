@@ -4,6 +4,7 @@ import de.creode.model.BoundedBoard;
 import de.creode.viewModel.ApplicationState;
 import de.creode.viewModel.ApplicationViewModel;
 import de.creode.viewModel.BoardViewModel;
+import de.creode.viewModel.EditorViewModel;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -20,7 +21,12 @@ public class App extends Application{
         ApplicationViewModel applicationViewModel = new ApplicationViewModel(ApplicationState.EDITING);
         BoardViewModel boardViewModel = new BoardViewModel();
         BoundedBoard boundedBoard = new BoundedBoard(B_HEIGHT, B_WIDTH);
-        MainView mainView = new MainView(applicationViewModel, boardViewModel, boundedBoard);
+        boardViewModel.setBoard(boundedBoard);
+        EditorViewModel editorViewModel = new EditorViewModel(boardViewModel, boundedBoard);
+
+        applicationViewModel.listenToAppState(editorViewModel::onAppStateChanged);
+
+        MainView mainView = new MainView(applicationViewModel, boardViewModel, editorViewModel);
         Scene scene = new Scene(mainView, 740, 660);
         stage.setScene(scene);
         stage.show();

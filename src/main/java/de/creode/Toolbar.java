@@ -6,6 +6,7 @@ import de.creode.model.StandardRule;
 import de.creode.viewModel.ApplicationState;
 import de.creode.viewModel.ApplicationViewModel;
 import de.creode.viewModel.BoardViewModel;
+import de.creode.viewModel.EditorViewModel;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Cell;
@@ -13,14 +14,15 @@ import javafx.scene.control.ToolBar;
 
 public class Toolbar extends ToolBar {
 
-    private MainView mainView;
+
     private Simulator simulator;
     private ApplicationViewModel applicationViewModel;
     private BoardViewModel boardViewModel;
-    public Toolbar(MainView mainView, ApplicationViewModel applicationViewModel, BoardViewModel boardViewModel) {
-        this.mainView = mainView;
+    private EditorViewModel editorViewModel;
+    public Toolbar(EditorViewModel editorViewModel, ApplicationViewModel applicationViewModel, BoardViewModel boardViewModel) {
         this.boardViewModel = boardViewModel;
         this.applicationViewModel = applicationViewModel;
+        this.editorViewModel = editorViewModel;
         Button draw = new Button("Draw");
         draw.setOnAction(this::handleDraw);
 
@@ -69,11 +71,11 @@ public class Toolbar extends ToolBar {
     }
 
     private void handleErase(ActionEvent actionEvent) {
-        this.mainView.setDrawMode(CellState.DEAD);
+        editorViewModel.setDrawMode(CellState.DEAD);
     }
 
     private void handleDraw(ActionEvent actionEvent) {
-        this.mainView.setDrawMode(CellState.ALIVE);
+        editorViewModel.setDrawMode(CellState.ALIVE);
     }
 
 

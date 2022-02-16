@@ -1,6 +1,7 @@
 package de.creode;
 
 import de.creode.model.CellState;
+import de.creode.viewModel.EditorViewModel;
 import javafx.scene.control.Cell;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -13,7 +14,9 @@ public class Infobar extends HBox {
     private static String cursorPosFormat = "Cursor: (%d, %d)";
     private Label cursor;
     private Label editingTool;
-    public Infobar() {
+
+    public Infobar(EditorViewModel editorViewModel) {
+        editorViewModel.listenToEditorViewModel(this::displayMode);
         this.cursor = new Label();
         this.editingTool = new Label();
 
@@ -25,7 +28,7 @@ public class Infobar extends HBox {
         this.getChildren().addAll(this.cursor, spacer, this.editingTool);
     }
 
-    public void setDrawMode(CellState drawMode){
+    private void displayMode(CellState drawMode){
         String drawModeString;
         if(drawMode == CellState.ALIVE){
             drawModeString = "Drawing";

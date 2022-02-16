@@ -7,6 +7,7 @@ import de.creode.model.StandardRule;
 import de.creode.viewModel.ApplicationState;
 import de.creode.viewModel.ApplicationViewModel;
 import de.creode.viewModel.BoardViewModel;
+import de.creode.viewModel.EditorViewModel;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -22,25 +23,20 @@ public class MainView extends VBox {
     private static final int C_HEIGHT = 600;
     private static final int C_WIDTH = 600;
     private Canvas canvas;
-    private Board initalBoard;
     private Affine affine;
-    private CellState drawMode = CellState.ALIVE;
     private Infobar infobar;
     private ApplicationViewModel appViewModel;
-    private boolean isDrawingEnabled = true;
     private BoardViewModel boardViewModel;
+    private EditorViewModel editorViewModel;
 
-    public MainView(ApplicationViewModel viewModel, BoardViewModel boardViewModel, Board initalBoard) {
+    public MainView(ApplicationViewModel viewModel, BoardViewModel boardViewModel, EditorViewModel editorViewModel) {
         this.canvas = new Canvas(C_HEIGHT, C_WIDTH);
         this.canvas.setOnMouseClicked(this::handleMouseDraw);
         this.canvas.setOnMouseDragged(this::handleMouseDraw);
         this.canvas.setOnMouseMoved(this::handleMouseMoved);
-        this.initalBoard = initalBoard;
 
-
+        this.editorViewModel = editorViewModel;
         this.appViewModel = viewModel;
-        this.appViewModel.listenToAppState(this::onApplicationStateChanged);
-
         this.boardViewModel = boardViewModel;
         this.boardViewModel.listenToBoard(this::onBoardChanged);
 
@@ -49,15 +45,15 @@ public class MainView extends VBox {
         spacer.setMaxSize(Double.MAX_VALUE,Double.MAX_VALUE);
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
-        this.infobar = new Infobar();
-        this.infobar.setDrawMode(this.drawMode);
+        this.infobar = new Infobar(editorViewModel );
+
         this.infobar.setCursorPosFormat(0,0);
 
-        Toolbar toolbar = new Toolbar(this, this.appViewModel, this.boardViewModel);
+        Toolbar toolbar = new Toolbar(this.editorViewModel, this.appViewModel, this.boardViewModel);
         this.getChildren().addAll(toolbar, this.canvas, spacer, this.infobar);
 
         this.affine = new Affine();
-        this.affine.appendScale(C_HEIGHT/initalBoard.getHeigth(),C_WIDTH/initalBoard.getWidth());
+        this.affine.appendScale(C_HEIGHT/boardViewModel.getBoard().getHeigth(),C_WIDTH/boardViewModel.getBoard().getWidth());
     }
 
     private void handleMouseMoved(MouseEvent mouseEvent) {
@@ -68,36 +64,15 @@ public class MainView extends VBox {
     }
 
 
-    public void setDrawMode(CellState mode){
-        this.drawMode = mode;
-        this.infobar.setDrawMode(mode);
-    }
-
-    private void  onApplicationStateChanged(ApplicationState newState){
-        if(newState == ApplicationState.EDITING){
-            this.isDrawingEnabled = true;
-            this.boardViewModel.setBoard(this.initalBoard);
-        } else if(newState == ApplicationState.SIMULATING){
-            this.isDrawingEnabled = false;
-        } else {
-            throw new IllegalArgumentException( "Unsupported Application state " + newState);
-        }
-    }
-
-
     private void onBoardChanged(Board board){
         draw(board);
     }
 
     private void handleMouseDraw(MouseEvent mouseEvent) {
-        if(!isDrawingEnabled){
-            return;
-        }
         Point2D simCoordinates = getSimulationCoordinates(mouseEvent);
         int mouseSimX = (int)simCoordinates.getX();
         int mouseSimY = (int)simCoordinates.getY();
-        this.initalBoard.setState(mouseSimX, mouseSimY, drawMode);
-        boardViewModel.setBoard(this.initalBoard);
+        this.editorViewModel.boardPresses(mouseSimX, mouseSimY);
     }
 
     private Point2D getSimulationCoordinates(MouseEvent event){
