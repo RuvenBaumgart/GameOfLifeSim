@@ -1,11 +1,10 @@
 package de.creode;
 
+import de.creode.View.SimulationView;
 import de.creode.model.BoundedBoard;
 import de.creode.viewModel.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class App extends Application{
@@ -19,17 +18,26 @@ public class App extends Application{
         BoardViewModel boardViewModel = new BoardViewModel();
         BoundedBoard boundedBoard = new BoundedBoard(B_HEIGHT, B_WIDTH);
         boardViewModel.setBoard(boundedBoard);
+
         EditorViewModel editorViewModel = new EditorViewModel(boardViewModel, boundedBoard);
         SimulationViewModel simulationViewModel = new SimulationViewModel(boardViewModel);
-
         applicationViewModel.listenToAppState(editorViewModel::onAppStateChanged);
         applicationViewModel.listenToAppState(simulationViewModel::onAppStateChange);
 
-        MainView mainView = new MainView(applicationViewModel, boardViewModel, editorViewModel, simulationViewModel);
-        Scene scene = new Scene(mainView, 740, 660);
+        Infobar infobar = new Infobar(editorViewModel );
+        infobar.setCursorPosFormat(0,0);
+        Toolbar toolbar = new Toolbar(editorViewModel, applicationViewModel, simulationViewModel );
+        SimulationView simulationView = new SimulationView(editorViewModel, boardViewModel);
+
+        MainView mainView = new MainView();
+        mainView.setTop(toolbar);
+        mainView.setCenter(simulationView);
+        mainView.setBottom(infobar);
+
+        Scene scene = new Scene(mainView, 1200, 800);
         stage.setScene(scene);
         stage.show();
-       boardViewModel.setBoard(boundedBoard);
+        boardViewModel.setBoard(boundedBoard);
     }
 
 

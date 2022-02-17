@@ -26,6 +26,7 @@ public class Infobar extends HBox {
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         this.getChildren().addAll(this.cursor, spacer, this.editingTool);
+        this.setCursorPosFormat(0,0);
     }
 
     private void displayMode(CellState drawMode){
