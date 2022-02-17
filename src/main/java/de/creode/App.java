@@ -14,15 +14,15 @@ public class App extends Application{
 
     @Override
     public void start(Stage stage) {
-        ApplicationViewModel applicationViewModel = new ApplicationViewModel(ApplicationState.EDITING);
+        ApplicationViewModel applicationViewModel = new ApplicationViewModel();
         BoardViewModel boardViewModel = new BoardViewModel();
         BoundedBoard boundedBoard = new BoundedBoard(B_HEIGHT, B_WIDTH);
         boardViewModel.setBoard(boundedBoard);
 
         EditorViewModel editorViewModel = new EditorViewModel(boardViewModel, boundedBoard);
         SimulationViewModel simulationViewModel = new SimulationViewModel(boardViewModel);
-        applicationViewModel.listenToAppState(editorViewModel::onAppStateChanged);
-        applicationViewModel.listenToAppState(simulationViewModel::onAppStateChange);
+        applicationViewModel.getProperty().listen(editorViewModel::onAppStateChanged);
+        applicationViewModel.getProperty().listen(simulationViewModel::onAppStateChange);
 
         Infobar infobar = new Infobar(editorViewModel );
         infobar.setCursorPosFormat(0,0);

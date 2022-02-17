@@ -11,20 +11,20 @@ class ApplicationViewModelTest {
     ApplicationStateListener appListener;
     @BeforeEach
     void setUp() {
-        applicationViewModel = new ApplicationViewModel(ApplicationState.EDITING);
+        applicationViewModel = new ApplicationViewModel();
         appListener = new ApplicationStateListener();
-        applicationViewModel.listenToAppState(appListener);
+        applicationViewModel.getProperty().listen(appListener);
     }
 
     @Test
     public void notifyAppListeners_afterStateChangedTheStateChangedToTrue(){
-        applicationViewModel.setCurrentState(ApplicationState.SIMULATING);
+        applicationViewModel.getProperty().set(ApplicationState.SIMULATING);
         assertEquals(ApplicationState.SIMULATING, appListener.state);
     }
 
     @Test
     public void notifyAppListeners_afterSameStateChangedStateIsFalse(){
-        applicationViewModel.setCurrentState(ApplicationState.EDITING);
+        applicationViewModel.getProperty().set(ApplicationState.EDITING);
         assertEquals(ApplicationState.EDITING, appListener.state);
     }
 

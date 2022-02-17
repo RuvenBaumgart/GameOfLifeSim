@@ -50,7 +50,7 @@ public class Toolbar extends ToolBar {
     }
 
     private void handleReset(ActionEvent actionEvent) {
-        this.applicationViewModel.setCurrentState(ApplicationState.EDITING);
+        this.applicationViewModel.getProperty().set(ApplicationState.EDITING);
     }
 
     private void handleStep(ActionEvent actionEvent) {
@@ -59,7 +59,7 @@ public class Toolbar extends ToolBar {
     }
 
     private void changeToSimulationState(){
-        this.applicationViewModel.setCurrentState(ApplicationState.SIMULATING);
+        this.applicationViewModel.getProperty().set(ApplicationState.SIMULATING);
     }
 
     private void handleErase(ActionEvent actionEvent) {

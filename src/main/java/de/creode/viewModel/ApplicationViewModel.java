@@ -1,32 +1,19 @@
 package de.creode.viewModel;
 
+import de.creode.utilities.Property;
+
 import java.util.LinkedList;
 import java.util.List;
 
 public class ApplicationViewModel {
-    private ApplicationState currentState;
-    private List<ISimpleChangeListener<ApplicationState>> appStateListeners;
 
+    private Property<ApplicationState> applicationState = new Property<>(ApplicationState.EDITING);
 
-    public ApplicationViewModel(ApplicationState currentState){
-        this.currentState = currentState;
-        this.appStateListeners = new LinkedList<>();
-    }
+   public ApplicationViewModel(){
+   }
 
-    public void listenToAppState(ISimpleChangeListener<ApplicationState> listener){
-        this.appStateListeners.add(listener);
-    }
+   public Property<ApplicationState> getProperty(){
+       return applicationState;
+   }
 
-    public void setCurrentState(ApplicationState newState){
-        if(this.currentState != newState) {
-            this.currentState = newState;
-            notifyAppStateListeners();
-        }
-    }
-
-    private void notifyAppStateListeners() {
-        for (ISimpleChangeListener appStateListener : appStateListeners) {
-            appStateListener.valueChanged(currentState);
-        }
-    }
 }
