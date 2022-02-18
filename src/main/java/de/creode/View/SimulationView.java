@@ -2,6 +2,7 @@ package de.creode.View;
 
 import de.creode.model.Board;
 import de.creode.model.CellState;
+import de.creode.model.CursorPosition;
 import de.creode.viewModel.BoardViewModel;
 import de.creode.viewModel.EditorViewModel;
 import javafx.geometry.Point2D;
@@ -25,9 +26,12 @@ public class SimulationView extends Pane {
         this.boardViewModel = boardViewModel;
         this.boardViewModel.getBoardProperty().listen(this::draw);
         this.editorViewModel = editorViewModel;
+        this.editorViewModel.getCursorPositionProperty().listen(cellPosition -> draw(boardViewModel.getBoardProperty().get()));
+
         this.canvas = new Canvas(C_HEIGHT, C_WIDTH);
         this.canvas.setOnMouseClicked(this::handleMouseDraw);
         this.canvas.setOnMouseDragged(this::handleMouseDraw);
+        this.canvas.setOnMouseMoved(this::handleMouseMoved);
 
         this.canvas.widthProperty().bind(this.widthProperty());
         this.canvas.heightProperty().bind(this.heightProperty());
@@ -40,45 +44,47 @@ public class SimulationView extends Pane {
                 C_WIDTH/this.boardViewModel.getBoardProperty().get().getWidth());
         }
 
-        @Override
+    private void handleMouseMoved(MouseEvent mouseEvent) {
+        CursorPosition cursorPosition = getSimulationCoordinates(mouseEvent);
+        this.editorViewModel.getCursorPositionProperty().set(cursorPosition);
+    }
+
+    @Override
         public void resize(double width, double height){
             super.resize(width, height);
             draw(boardViewModel.getBoardProperty().get());
         }
 
     private void handleMouseDraw(MouseEvent mouseEvent) {
-        Point2D simCoordinates = getSimulationCoordinates(mouseEvent);
-        int mouseSimX = (int)simCoordinates.getX();
-        int mouseSimY = (int)simCoordinates.getY();
-        this.editorViewModel.boardPresses(mouseSimX, mouseSimY);
+        CursorPosition cursorPosition = getSimulationCoordinates(mouseEvent);
+        this.editorViewModel.boardPresses(cursorPosition);
     }
 
-    private Point2D getSimulationCoordinates(MouseEvent event){
+    private CursorPosition getSimulationCoordinates(MouseEvent event){
         try {
-            return this.affine.inverseTransform(event.getX(), event.getY());
+            Point2D simCoordinates = this.affine.inverseTransform(event.getX(), event.getY());
+            return new CursorPosition ((int)simCoordinates.getX(), (int)simCoordinates.getY());
         } catch (NonInvertibleTransformException e) {
             throw new RuntimeException("Inverse Transformation Error");
         }
     }
 
     public void draw(Board board){
+        fill();
+        drawGrid(board);
+        drawRect(board);
+        drawHighlight();
+    }
+
+    private void fill(){
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
         gc.setFill(Color.LIGHTGRAY);
         gc.fillRect(0,0,C_HEIGHT,C_WIDTH);
         gc.setTransform(this.affine);
-        drawBoard(board);
     }
 
-    private void drawBoard (Board board){
+    private void drawGrid(Board board){
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
-        gc.setFill(Color.BLACK);
-        for (int i = 0; i < board.getWidth() ; i++) {
-            for (int j = 0; j < board.getHeigth(); j++) {
-                if(board.getState(i,j) == CellState.ALIVE){
-                    gc.fillRect(i, j, 1, 1 );
-                }
-            }
-        }
         gc.setStroke(Color.GRAY);
         gc.setLineWidth(0.05d);
         for (int i = 0; i <= board.getWidth(); i++) {
@@ -87,6 +93,27 @@ public class SimulationView extends Pane {
 
         for (int i = 0; i <= board.getHeigth(); i++) {
             gc.strokeLine(0, i, board.getWidth(), i);
+        }
+    }
+
+    private void drawRect (Board board){
+        GraphicsContext gc = this.canvas.getGraphicsContext2D();
+        gc.setFill(Color.BLACK);
+        for (int i = 0; i < board.getWidth() ; i++) {
+            for (int j = 0; j < board.getHeigth(); j++) {
+                if (board.getState(i, j) == CellState.ALIVE) {
+                    gc.fillRect(i, j, 1, 1);
+                }
+            }
+        }
+    }
+
+    private void drawHighlight(){
+        GraphicsContext gc = this.canvas.getGraphicsContext2D();
+        if(editorViewModel.getCursorPositionProperty().isPresent()){
+            CursorPosition cursorPosition = editorViewModel.getCursorPositionProperty().get();
+            gc.setFill(new Color(0, 0, 0.0, 1.0));
+            gc.fillRect(cursorPosition.getPosX(), cursorPosition.getPosY(), 1, 1);
         }
     }
 }
