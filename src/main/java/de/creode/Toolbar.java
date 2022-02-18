@@ -63,11 +63,11 @@ public class Toolbar extends ToolBar {
     }
 
     private void handleErase(ActionEvent actionEvent) {
-        editorViewModel.setDrawMode(CellState.DEAD);
+        editorViewModel.getCellStateProperty().set(CellState.DEAD);
     }
 
     private void handleDraw(ActionEvent actionEvent) {
-        editorViewModel.setDrawMode(CellState.ALIVE);
+        editorViewModel.getCellStateProperty().set(CellState.ALIVE);
     }
 
 

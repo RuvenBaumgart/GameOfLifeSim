@@ -1,12 +1,12 @@
 de/creode/Toolbar.class
 de/creode/model/CellState.class
 de/creode/model/Board.class
-de/creode/Simulator.class
 de/creode/model/StandardRule.class
 de/creode/viewModel/ApplicationViewModel.class
 de/creode/viewModel/ISimpleChangeListener.class
 de/creode/viewModel/EditorViewModel.class
 de/creode/model/BoundedBoard.class
+de/creode/View/SimulationView.class
 de/creode/Simulation.class
 de/creode/App.class
 module-info.class
@@ -14,4 +14,6 @@ de/creode/viewModel/ApplicationState.class
 de/creode/viewModel/BoardViewModel.class
 de/creode/Infobar.class
 de/creode/MainView.class
+de/creode/viewModel/SimulationViewModel.class
+de/creode/utilities/Property.class
 de/creode/model/Rule.class

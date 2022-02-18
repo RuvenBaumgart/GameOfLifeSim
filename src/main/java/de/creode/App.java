@@ -17,7 +17,7 @@ public class App extends Application{
         ApplicationViewModel applicationViewModel = new ApplicationViewModel();
         BoardViewModel boardViewModel = new BoardViewModel();
         BoundedBoard boundedBoard = new BoundedBoard(B_HEIGHT, B_WIDTH);
-        boardViewModel.setBoard(boundedBoard);
+        boardViewModel.getBoardProperty().set(boundedBoard);
 
         EditorViewModel editorViewModel = new EditorViewModel(boardViewModel, boundedBoard);
         SimulationViewModel simulationViewModel = new SimulationViewModel(boardViewModel);
@@ -37,7 +37,7 @@ public class App extends Application{
         Scene scene = new Scene(mainView, 1200, 800);
         stage.setScene(scene);
         stage.show();
-        boardViewModel.setBoard(boundedBoard);
+        boardViewModel.getBoardProperty().set(boundedBoard);
     }
 
 

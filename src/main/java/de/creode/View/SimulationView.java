@@ -23,7 +23,7 @@ public class SimulationView extends Pane {
 
     public SimulationView(EditorViewModel editorViewModel, BoardViewModel boardViewModel){
         this.boardViewModel = boardViewModel;
-        this.boardViewModel.listenToBoard(this::draw);
+        this.boardViewModel.getBoardProperty().listen(this::draw);
         this.editorViewModel = editorViewModel;
         this.canvas = new Canvas(C_HEIGHT, C_WIDTH);
         this.canvas.setOnMouseClicked(this::handleMouseDraw);
@@ -36,14 +36,14 @@ public class SimulationView extends Pane {
 
         this.affine = new Affine();
         this.affine.appendScale(
-                C_HEIGHT/this.boardViewModel.getBoard().getHeigth(),
-                C_WIDTH/this.boardViewModel.getBoard().getWidth());
+                C_HEIGHT/this.boardViewModel.getBoardProperty().get().getHeigth(),
+                C_WIDTH/this.boardViewModel.getBoardProperty().get().getWidth());
         }
 
         @Override
         public void resize(double width, double height){
             super.resize(width, height);
-            draw(boardViewModel.getBoard());
+            draw(boardViewModel.getBoardProperty().get());
         }
 
     private void handleMouseDraw(MouseEvent mouseEvent) {
