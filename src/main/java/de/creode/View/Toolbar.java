@@ -1,4 +1,4 @@
-package de.creode;
+package de.creode.View;
 
 import de.creode.model.Board;
 import de.creode.model.CellState;

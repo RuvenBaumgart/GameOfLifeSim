@@ -1,11 +1,9 @@
 package de.creode.viewModel;
 
-import de.creode.Simulation;
+import de.creode.logic.Simulation;
 import de.creode.model.StandardRule;
-import de.creode.viewModel.BoardViewModel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.util.Duration;
 
 public class SimulationViewModel {

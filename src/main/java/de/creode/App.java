@@ -1,6 +1,9 @@
 package de.creode;
 
+import de.creode.View.Infobar;
+import de.creode.View.MainView;
 import de.creode.View.SimulationView;
+import de.creode.View.Toolbar;
 import de.creode.model.BoundedBoard;
 import de.creode.viewModel.*;
 import javafx.application.Application;
