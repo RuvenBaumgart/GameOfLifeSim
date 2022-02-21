@@ -51,16 +51,15 @@ public class Toolbar extends ToolBar {
     }
 
     private void handleStep(ActionEvent actionEvent) {
-
         eventBus.emit(new ToolBarEvent(ToolBarEvent.Type.STEP));
     }
 
     private void handleErase(ActionEvent actionEvent) {
-        editorViewModel.getCellStateProperty().set(CellState.DEAD);
+        eventBus.emit(new ToolBarEvent(ToolBarEvent.Type.ERASE));
     }
 
     private void handleDraw(ActionEvent actionEvent) {
-        editorViewModel.getCellStateProperty().set(CellState.ALIVE);
+        eventBus.emit(new ToolBarEvent(ToolBarEvent.Type.DRAW));
     }
 
 

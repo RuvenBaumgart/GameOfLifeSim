@@ -37,6 +37,8 @@ public class App extends Application{
         SimulationView simulationView = new SimulationView(editorViewModel, boardViewModel);
 
         eventBus.listen(ToolBarEvent.class, simulationViewModel::handle);
+        eventBus.listen(ToolBarEvent.class, infobar::handle);
+        eventBus.listen(ToolBarEvent.class, editorViewModel::handle);
 
 
         MainView mainView = new MainView();

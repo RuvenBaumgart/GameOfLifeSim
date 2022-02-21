@@ -3,10 +3,12 @@ package de.creode.utilities.event;
 public class ToolBarEvent implements IEvent{
 
     public enum Type{
-       START,
-       STOP,
-       RESET,
-       STEP
+        START,
+        STOP,
+        RESET,
+        STEP,
+        ERASE,
+        DRAW
    }
 
     private Type type;

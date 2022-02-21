@@ -5,6 +5,8 @@ import de.creode.model.Board;
 import de.creode.model.CellState;
 import de.creode.model.CursorPosition;
 import de.creode.utilities.Property;
+import de.creode.utilities.event.IEvent;
+import de.creode.utilities.event.ToolBarEvent;
 
 public class EditorViewModel {
     private Board editorBoard;
@@ -42,5 +44,16 @@ public class EditorViewModel {
 
     public Property<CursorPosition> getCursorPositionProperty() {
         return cursorPositionProperty;
+    }
+
+    public  void handle(ToolBarEvent toolBarEvent) {
+        switch (toolBarEvent.getType()){
+            case DRAW:
+                cellStateProperty.set(CellState.ALIVE);
+                break;
+            case ERASE:
+                cellStateProperty.set(CellState.DEAD);
+                break;
+        }
     }
 }
