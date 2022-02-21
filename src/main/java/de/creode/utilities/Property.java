@@ -1,7 +1,5 @@
 package de.creode.utilities;
 
-import de.creode.viewModel.ISimpleChangeListener;
-
 import java.util.LinkedList;
 import java.util.List;
 

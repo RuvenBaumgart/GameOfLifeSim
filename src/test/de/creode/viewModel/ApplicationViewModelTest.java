@@ -1,5 +1,7 @@
 package de.creode.viewModel;
 
+import de.creode.model.ApplicationState;
+import de.creode.utilities.ISimpleChangeListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

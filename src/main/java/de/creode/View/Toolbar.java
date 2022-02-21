@@ -1,12 +1,10 @@
 package de.creode.View;
 
-import de.creode.model.Board;
+import de.creode.model.ApplicationState;
 import de.creode.model.CellState;
-import de.creode.model.StandardRule;
 import de.creode.viewModel.*;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
-import javafx.scene.control.Cell;
 import javafx.scene.control.ToolBar;
 
 public class Toolbar extends ToolBar {

@@ -1,4 +1,4 @@
-package de.creode.viewModel;
+package de.creode.utilities;
 
 public interface ISimpleChangeListener<T> {
     void valueChanged(T value);

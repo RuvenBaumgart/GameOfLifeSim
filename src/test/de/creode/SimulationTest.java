@@ -1,5 +1,6 @@
 package de.creode;
 
+import de.creode.logic.Simulation;
 import de.creode.model.Board;
 import de.creode.model.BoundedBoard;
 import de.creode.model.CellState;

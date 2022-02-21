@@ -22,7 +22,7 @@ public class App extends Application{
         BoundedBoard boundedBoard = new BoundedBoard(B_HEIGHT, B_WIDTH);
         boardViewModel.getBoardProperty().set(boundedBoard);
 
-        EditorViewModel editorViewModel = new EditorViewModel(boardViewModel, boundedBoard);
+        EditorViewModel editorViewModel = new EditorViewModel(boardViewModel);
         SimulationViewModel simulationViewModel = new SimulationViewModel(boardViewModel);
         applicationViewModel.getProperty().listen(editorViewModel::onAppStateChanged);
         applicationViewModel.getProperty().listen(simulationViewModel::onAppStateChange);

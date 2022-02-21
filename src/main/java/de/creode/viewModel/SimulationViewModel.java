@@ -1,6 +1,7 @@
 package de.creode.viewModel;
 
 import de.creode.logic.Simulation;
+import de.creode.model.ApplicationState;
 import de.creode.model.StandardRule;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;

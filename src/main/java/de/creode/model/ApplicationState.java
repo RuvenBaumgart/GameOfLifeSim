@@ -1,4 +1,4 @@
-package de.creode.viewModel;
+package de.creode.model;
 
 public enum ApplicationState {
     SIMULATING,

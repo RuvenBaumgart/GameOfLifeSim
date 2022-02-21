@@ -1,6 +1,6 @@
 package de.creode.utilities;
 
-import de.creode.viewModel.ISimpleChangeListener;
+import de.creode.utilities.ISimpleChangeListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

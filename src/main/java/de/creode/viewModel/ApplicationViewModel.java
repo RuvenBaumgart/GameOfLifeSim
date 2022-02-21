@@ -1,9 +1,7 @@
 package de.creode.viewModel;
 
+import de.creode.model.ApplicationState;
 import de.creode.utilities.Property;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class ApplicationViewModel {
 
