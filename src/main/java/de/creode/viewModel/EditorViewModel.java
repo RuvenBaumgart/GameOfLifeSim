@@ -5,7 +5,7 @@ import de.creode.model.Board;
 import de.creode.model.CellState;
 import de.creode.model.CursorPosition;
 import de.creode.utilities.Property;
-import de.creode.utilities.event.IEvent;
+
 import de.creode.utilities.event.ToolBarEvent;
 
 public class EditorViewModel {

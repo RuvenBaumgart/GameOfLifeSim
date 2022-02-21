@@ -31,14 +31,15 @@ public class App extends Application{
         SimulationViewModel simulationViewModel = new SimulationViewModel(boardViewModel, applicationViewModel);
         applicationViewModel.getProperty().listen(editorViewModel::onAppStateChanged);
 
-        Infobar infobar = new Infobar(editorViewModel );
+        Infobar infobar = new Infobar();
         infobar.setCursorPosFormat(0,0);
-        Toolbar toolbar = new Toolbar(editorViewModel, eventBus);
+        Toolbar toolbar = new Toolbar(eventBus);
         SimulationView simulationView = new SimulationView(editorViewModel, boardViewModel);
 
         eventBus.listen(ToolBarEvent.class, simulationViewModel::handle);
-        eventBus.listen(ToolBarEvent.class, infobar::handle);
         eventBus.listen(ToolBarEvent.class, editorViewModel::handle);
+
+        editorViewModel.getCellStateProperty().listen(infobar::displayMode);
 
 
         MainView mainView = new MainView();

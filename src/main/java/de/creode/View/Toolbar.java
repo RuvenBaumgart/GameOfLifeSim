@@ -11,12 +11,9 @@ import javafx.scene.control.ToolBar;
 
 public class Toolbar extends ToolBar {
 
-    private EditorViewModel editorViewModel;
     private EventBus eventBus;
-    public Toolbar(EditorViewModel editorViewModel, EventBus eventBus) {
+    public Toolbar(EventBus eventBus) {
         this.eventBus = eventBus;
-        this.editorViewModel = editorViewModel;
-
         Button draw = new Button("Draw");
         draw.setOnAction(this::handleDraw);
 
@@ -55,10 +52,12 @@ public class Toolbar extends ToolBar {
     }
 
     private void handleErase(ActionEvent actionEvent) {
+
         eventBus.emit(new ToolBarEvent(ToolBarEvent.Type.ERASE));
     }
 
     private void handleDraw(ActionEvent actionEvent) {
+
         eventBus.emit(new ToolBarEvent(ToolBarEvent.Type.DRAW));
     }
 

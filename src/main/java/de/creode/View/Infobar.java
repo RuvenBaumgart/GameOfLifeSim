@@ -17,8 +17,8 @@ public class Infobar extends HBox {
     private Label cursor;
     private Label editingTool;
 
-    public Infobar(EditorViewModel editorViewModel) {
-        editorViewModel.getCellStateProperty().listen(this::displayMode);
+    public Infobar() {
+
         this.cursor = new Label();
         this.editingTool = new Label();
 
@@ -33,7 +33,7 @@ public class Infobar extends HBox {
 
     }
 
-    private void displayMode(CellState drawMode){
+    public void displayMode(CellState drawMode){
         String drawModeString;
         if(drawMode == CellState.ALIVE){
             drawModeString = "Drawing";
@@ -47,14 +47,4 @@ public class Infobar extends HBox {
         this.cursor.setText((String.format(cursorPosFormat, x, y)));
     }
 
-    public void handle(ToolBarEvent toolBarEvent) {
-        switch (toolBarEvent.getType()){
-            case ERASE:
-                this.displayMode(CellState.DEAD);
-                break;
-            case DRAW:
-                this.displayMode(CellState.ALIVE);
-                break;
-        }
-    }
 }
