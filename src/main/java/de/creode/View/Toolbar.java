@@ -2,20 +2,21 @@ package de.creode.View;
 
 import de.creode.model.ApplicationState;
 import de.creode.model.CellState;
+import de.creode.utilities.event.EventBus;
+import de.creode.utilities.event.ToolBarEvent;
 import de.creode.viewModel.*;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 
 public class Toolbar extends ToolBar {
-    private SimulationViewModel simulationViewModel;
-    private ApplicationViewModel applicationViewModel;
-    private EditorViewModel editorViewModel;
-    public Toolbar(EditorViewModel editorViewModel, ApplicationViewModel applicationViewModel, SimulationViewModel simulationViewModel) {
 
-        this.applicationViewModel = applicationViewModel;
+    private EditorViewModel editorViewModel;
+    private EventBus eventBus;
+    public Toolbar(EditorViewModel editorViewModel, EventBus eventBus) {
+        this.eventBus = eventBus;
         this.editorViewModel = editorViewModel;
-        this.simulationViewModel = simulationViewModel;
+
         Button draw = new Button("Draw");
         draw.setOnAction(this::handleDraw);
 
@@ -35,29 +36,23 @@ public class Toolbar extends ToolBar {
         stop.setOnAction(this::handleStop);
 
         this.getItems().addAll(draw, erase, step, reset, start, stop);
-
     }
 
     private void handleStart(ActionEvent actionEvent) {
-        changeToSimulationState();
-        this.simulationViewModel.start();
+        eventBus.emit(new ToolBarEvent(ToolBarEvent.Type.START));
     }
 
     private void handleStop(ActionEvent actionEvent) {
-        this.simulationViewModel.stop();
+        eventBus.emit(new ToolBarEvent(ToolBarEvent.Type.STOP));
     }
 
     private void handleReset(ActionEvent actionEvent) {
-        this.applicationViewModel.getProperty().set(ApplicationState.EDITING);
+        eventBus.emit(new ToolBarEvent(ToolBarEvent.Type.RESET));
     }
 
     private void handleStep(ActionEvent actionEvent) {
-        changeToSimulationState();
-        this.simulationViewModel.doSimulation();
-    }
 
-    private void changeToSimulationState(){
-        this.applicationViewModel.getProperty().set(ApplicationState.SIMULATING);
+        eventBus.emit(new ToolBarEvent(ToolBarEvent.Type.STEP));
     }
 
     private void handleErase(ActionEvent actionEvent) {

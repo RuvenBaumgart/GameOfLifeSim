@@ -5,8 +5,11 @@ import de.creode.View.MainView;
 import de.creode.View.SimulationView;
 import de.creode.View.Toolbar;
 import de.creode.model.BoundedBoard;
+import de.creode.utilities.event.EventBus;
+import de.creode.utilities.event.ToolBarEvent;
 import de.creode.viewModel.*;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -17,22 +20,27 @@ public class App extends Application{
 
     @Override
     public void start(Stage stage) {
+        EventBus eventBus = new EventBus();
+
         ApplicationViewModel applicationViewModel = new ApplicationViewModel();
         BoardViewModel boardViewModel = new BoardViewModel();
         BoundedBoard boundedBoard = new BoundedBoard(B_HEIGHT, B_WIDTH);
         boardViewModel.getBoardProperty().set(boundedBoard);
 
         EditorViewModel editorViewModel = new EditorViewModel(boardViewModel);
-        SimulationViewModel simulationViewModel = new SimulationViewModel(boardViewModel);
+        SimulationViewModel simulationViewModel = new SimulationViewModel(boardViewModel, applicationViewModel);
         applicationViewModel.getProperty().listen(editorViewModel::onAppStateChanged);
-        applicationViewModel.getProperty().listen(simulationViewModel::onAppStateChange);
 
         Infobar infobar = new Infobar(editorViewModel );
         infobar.setCursorPosFormat(0,0);
-        Toolbar toolbar = new Toolbar(editorViewModel, applicationViewModel, simulationViewModel );
+        Toolbar toolbar = new Toolbar(editorViewModel, eventBus);
         SimulationView simulationView = new SimulationView(editorViewModel, boardViewModel);
 
+        eventBus.listen(ToolBarEvent.class, simulationViewModel::handle);
+
+
         MainView mainView = new MainView();
+        mainView.setPadding(new Insets(3.0));
         mainView.setTop(toolbar);
         mainView.setCenter(simulationView);
         mainView.setBottom(infobar);
