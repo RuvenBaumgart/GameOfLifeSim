@@ -6,6 +6,7 @@ import de.creode.View.SimulationView;
 import de.creode.View.Toolbar;
 import de.creode.model.BoundedBoard;
 import de.creode.utilities.event.EventBus;
+import de.creode.utilities.event.MyMouseEvent;
 import de.creode.utilities.event.ToolBarEvent;
 import de.creode.viewModel.*;
 import javafx.application.Application;
@@ -32,15 +33,24 @@ public class App extends Application{
         applicationViewModel.getProperty().listen(editorViewModel::onAppStateChanged);
 
         Infobar infobar = new Infobar();
-        infobar.setCursorPosFormat(0,0);
         Toolbar toolbar = new Toolbar(eventBus);
-        SimulationView simulationView = new SimulationView(editorViewModel, boardViewModel);
+        SimulationView simulationView = new SimulationView(boardViewModel, eventBus);
+
+
+        boardViewModel.getBoardProperty().listen(simulationView::draw);
 
         eventBus.listen(ToolBarEvent.class, simulationViewModel::handle);
         eventBus.listen(ToolBarEvent.class, editorViewModel::handle);
 
         editorViewModel.getCellStateProperty().listen(infobar::displayMode);
+        editorViewModel.getCursorPositionProperty().listen(infobar::setCursorPosFormat);
+        editorViewModel.getCursorPositionProperty().listen(cellposition->{
+            simulationView.draw(boardViewModel.getBoardProperty().get());
+        });
 
+        editorViewModel.getCursorPositionProperty().listen(simulationView::drawHighlight);
+
+        eventBus.listen(MyMouseEvent.class, editorViewModel::handle);
 
         MainView mainView = new MainView();
         mainView.setPadding(new Insets(3.0));

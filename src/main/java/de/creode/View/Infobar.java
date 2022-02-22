@@ -1,15 +1,12 @@
 package de.creode.View;
 
 import de.creode.model.CellState;
-import de.creode.utilities.event.IEvent;
-import de.creode.utilities.event.ToolBarEvent;
-import de.creode.viewModel.EditorViewModel;
-import javafx.scene.control.Cell;
+import de.creode.model.CursorPosition;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+
 
 public class Infobar extends HBox {
     private static String drawModeFormat = "Draw Mode: %s";
@@ -28,7 +25,7 @@ public class Infobar extends HBox {
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         this.getChildren().addAll(this.cursor, spacer, this.editingTool);
-        this.setCursorPosFormat(0,0);
+        this.setCursorPosFormat(new CursorPosition(0,0));
         this.displayMode(CellState.ALIVE);
 
     }
@@ -43,8 +40,8 @@ public class Infobar extends HBox {
         this.editingTool.setText(String.format(drawModeFormat, drawModeString));
     }
 
-    public void setCursorPosFormat(int x, int y){
-        this.cursor.setText((String.format(cursorPosFormat, x, y)));
+    public void setCursorPosFormat(CursorPosition cp){
+        this.cursor.setText((String.format(cursorPosFormat, cp.getPosX(), cp.getPosY())));
     }
 
 }

@@ -7,6 +7,7 @@ import de.creode.utilities.event.IEvent;
 import de.creode.utilities.event.ToolBarEvent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.transform.Affine;
 import javafx.util.Duration;
 
 public class SimulationViewModel {
@@ -14,6 +15,7 @@ public class SimulationViewModel {
     private Timeline timeline;
     private BoardViewModel boardViewModel;
     private ApplicationViewModel applicationViewModel;
+    private Affine affine;
 
     public SimulationViewModel( BoardViewModel boardViewModel, ApplicationViewModel applicationViewModel) {
         this.boardViewModel = boardViewModel;
@@ -21,6 +23,8 @@ public class SimulationViewModel {
         timeline = new Timeline(new KeyFrame(Duration.millis(200), event -> this.doSimulation()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         this.simulation = new Simulation(boardViewModel.getBoardProperty().get(), new StandardRule());
+
+
     }
 
 

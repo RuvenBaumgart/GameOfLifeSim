@@ -3,6 +3,8 @@ package de.creode.View;
 import de.creode.model.Board;
 import de.creode.model.CellState;
 import de.creode.model.CursorPosition;
+import de.creode.utilities.event.EventBus;
+import de.creode.utilities.event.MyMouseEvent;
 import de.creode.viewModel.BoardViewModel;
 import de.creode.viewModel.EditorViewModel;
 import javafx.geometry.Point2D;
@@ -19,14 +21,12 @@ public class SimulationView extends Pane {
     private static final int C_WIDTH = 600;
     private Canvas canvas;
     private Affine affine;
-    private EditorViewModel editorViewModel;
+    private EventBus eventBus;
     private BoardViewModel boardViewModel;
 
-    public SimulationView(EditorViewModel editorViewModel, BoardViewModel boardViewModel){
+    public SimulationView(BoardViewModel boardViewModel, EventBus eventBus){
         this.boardViewModel = boardViewModel;
-        this.boardViewModel.getBoardProperty().listen(this::draw);
-        this.editorViewModel = editorViewModel;
-        this.editorViewModel.getCursorPositionProperty().listen(cellPosition -> draw(boardViewModel.getBoardProperty().get()));
+        this.eventBus = eventBus;
 
         this.canvas = new Canvas(C_HEIGHT, C_WIDTH);
         this.canvas.setOnMouseClicked(this::handleMouseDraw);
@@ -37,16 +37,16 @@ public class SimulationView extends Pane {
         this.canvas.heightProperty().bind(this.heightProperty());
 
         this.getChildren().add(this.canvas);
-
         this.affine = new Affine();
         this.affine.appendScale(
                 C_HEIGHT/this.boardViewModel.getBoardProperty().get().getHeigth(),
                 C_WIDTH/this.boardViewModel.getBoardProperty().get().getWidth());
+
         }
 
     private void handleMouseMoved(MouseEvent mouseEvent) {
         CursorPosition cursorPosition = getSimulationCoordinates(mouseEvent);
-        this.editorViewModel.getCursorPositionProperty().set(cursorPosition);
+        this.eventBus.emit(new MyMouseEvent(MyMouseEvent.Type.MOVED, cursorPosition));
     }
 
     @Override
@@ -57,7 +57,7 @@ public class SimulationView extends Pane {
 
     private void handleMouseDraw(MouseEvent mouseEvent) {
         CursorPosition cursorPosition = getSimulationCoordinates(mouseEvent);
-        this.editorViewModel.boardPresses(cursorPosition);
+        this.eventBus.emit(new MyMouseEvent(MyMouseEvent.Type.DRAGED, cursorPosition));
     }
 
     private CursorPosition getSimulationCoordinates(MouseEvent event){
@@ -73,7 +73,6 @@ public class SimulationView extends Pane {
         fill();
         drawGrid(board);
         drawRect(board);
-        drawHighlight();
     }
 
     private void fill(){
@@ -108,12 +107,9 @@ public class SimulationView extends Pane {
         }
     }
 
-    private void drawHighlight(){
+    public void drawHighlight(CursorPosition cursorPosition){
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
-        if(editorViewModel.getCursorPositionProperty().isPresent()){
-            CursorPosition cursorPosition = editorViewModel.getCursorPositionProperty().get();
-            gc.setFill(new Color(0, 0, 0.0, 1.0));
-            gc.fillRect(cursorPosition.getPosX(), cursorPosition.getPosY(), 1, 1);
+        gc.setFill(new Color(0.9, 0.8, 0.0, 1.0));
+        gc.fillRect(cursorPosition.getPosX(), cursorPosition.getPosY(), 1, 1);
         }
-    }
 }

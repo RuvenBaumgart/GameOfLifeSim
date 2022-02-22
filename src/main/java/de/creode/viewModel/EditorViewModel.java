@@ -6,6 +6,7 @@ import de.creode.model.CellState;
 import de.creode.model.CursorPosition;
 import de.creode.utilities.Property;
 
+import de.creode.utilities.event.MyMouseEvent;
 import de.creode.utilities.event.ToolBarEvent;
 
 public class EditorViewModel {
@@ -53,6 +54,17 @@ public class EditorViewModel {
                 break;
             case ERASE:
                 cellStateProperty.set(CellState.DEAD);
+                break;
+        }
+    }
+
+    public void handle(MyMouseEvent mouseEvent){
+        switch (mouseEvent.getType()){
+            case MOVED:
+                this.cursorPositionProperty.set(mouseEvent.getCursorPosition());
+                break;
+            case DRAGED:
+                this.boardPresses(mouseEvent.getCursorPosition());
                 break;
         }
     }
