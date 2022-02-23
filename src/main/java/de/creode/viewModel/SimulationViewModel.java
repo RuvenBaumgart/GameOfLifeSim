@@ -13,6 +13,7 @@ import javafx.util.Duration;
 public class SimulationViewModel {
     private Simulation simulation;
     private Timeline timeline;
+    private int timelineDuration;
     private BoardViewModel boardViewModel;
     private ApplicationViewModel applicationViewModel;
 
@@ -20,9 +21,8 @@ public class SimulationViewModel {
     public SimulationViewModel( BoardViewModel boardViewModel, ApplicationViewModel applicationViewModel) {
         this.boardViewModel = boardViewModel;
         this.applicationViewModel = applicationViewModel;
-        timeline = new Timeline(new KeyFrame(Duration.millis(200), event -> this.doSimulation()));
-        timeline.setCycleCount(Timeline.INDEFINITE);
         this.simulation = new Simulation(boardViewModel.getBoardProperty().get(), new StandardRule());
+        this.timelineDuration = 200;
     }
 
 
@@ -34,8 +34,22 @@ public class SimulationViewModel {
     }
 
     public void start(){
+        createNewTimeline();
         this.timeline.play();
     }
+
+    public void setTimelineDuration(int timelineDuration) {
+        int transformedTimeLineValue = 501 - timelineDuration;
+        this.timelineDuration = transformedTimeLineValue;
+    }
+
+    public void createNewTimeline(){
+        this.timeline = new Timeline();
+        this.timeline.getKeyFrames().add(new KeyFrame(Duration.millis(timelineDuration), event->this.doSimulation()));
+        this.timeline.setCycleCount(Timeline.INDEFINITE);
+    }
+
+
 
     public void stop(){
         this.timeline.stop();
@@ -63,6 +77,11 @@ public class SimulationViewModel {
         switch (optionsEvent.getType()){
             case GRID_SIZE:
                 this.reset();
+                break;
+            case SIMULATION_SPEED:
+                this.stop();
+                this.setTimelineDuration(optionsEvent.getValue());
+                this.start();
                 break;
         }
     }

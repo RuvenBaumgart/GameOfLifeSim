@@ -24,11 +24,11 @@ public class OptionsView extends VBox {
 
         gridSizeSlider.valueProperty().addListener((observable, oldValue, newValue) -> this.handleGridSizeChanged((double)newValue));
 
-        Slider simulationSpeed = new Slider(0.1,1,0.5);
+        Slider simulationSpeed = new Slider(1,500,301);
         simulationSpeed.setShowTickMarks(true);
         simulationSpeed.setShowTickLabels(true);
-        simulationSpeed.setMajorTickUnit(0.25f);
-        simulationSpeed.setBlockIncrement(0.1f);
+        simulationSpeed.setMajorTickUnit(25);
+        simulationSpeed.setBlockIncrement(5);
 
         Label speedLabel= new Label("Simulation Speed");
 
@@ -44,8 +44,9 @@ public class OptionsView extends VBox {
         eventBus.emit(new OptionsEvent(OptionsEvent.Type.GRID_SIZE, value));
     }
 
-    private void handleSimulationSpeedChanged(double  newValue){
-        //eventBus.emit(new OptionsEvent(OptionsEvent.Type.SIMULATION_SPEED, newValue));
+    private void handleSimulationSpeedChanged(double newValue){
+        int value = (int)newValue;
+        eventBus.emit(new OptionsEvent(OptionsEvent.Type.SIMULATION_SPEED, value));
     }
 
 }
