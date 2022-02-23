@@ -1,12 +1,14 @@
 package de.creode.viewModel;
 
 import de.creode.model.ApplicationState;
-import de.creode.model.Board;
+import de.creode.model.board.Board;
 import de.creode.model.CellState;
 import de.creode.model.CursorPosition;
+import de.creode.model.board.BoundedBoard;
 import de.creode.utilities.Property;
 
 import de.creode.utilities.event.MyMouseEvent;
+import de.creode.utilities.event.OptionsEvent;
 import de.creode.utilities.event.ToolBarEvent;
 
 public class EditorViewModel {
@@ -20,6 +22,10 @@ public class EditorViewModel {
     public EditorViewModel(BoardViewModel boardViewModel){
         this.editorBoard = boardViewModel.getBoardProperty().get();
         this.boardViewModel = boardViewModel;
+    }
+
+    public void setEditorBoard(Board editorBoard){
+        this.editorBoard = editorBoard;
     }
 
     public void onAppStateChanged(ApplicationState state){
@@ -65,6 +71,14 @@ public class EditorViewModel {
                 break;
             case DRAGED:
                 this.boardPresses(mouseEvent.getCursorPosition());
+                break;
+        }
+    }
+
+    public void handle(OptionsEvent optionsEvent){
+        switch (optionsEvent.getType()){
+            case GRID_SIZE:
+                this.setEditorBoard(new BoundedBoard(optionsEvent.getValue(), optionsEvent.getValue()));
                 break;
         }
     }

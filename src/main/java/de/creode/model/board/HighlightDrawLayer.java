@@ -1,5 +1,8 @@
-package de.creode.model;
+package de.creode.model.board;
 
+import de.creode.model.CursorPosition;
+import de.creode.model.IDrawLayer;
+import de.creode.model.IDrawLayerListener;
 import de.creode.viewModel.BoardViewModel;
 import de.creode.viewModel.EditorViewModel;
 import javafx.scene.canvas.GraphicsContext;
@@ -8,7 +11,7 @@ import javafx.scene.paint.Color;
 import java.util.LinkedList;
 import java.util.List;
 
-public class HighlightDrawLayer implements IDrawLayer{
+public class HighlightDrawLayer implements IDrawLayer {
     private List<IDrawLayerListener> listeners = new LinkedList<>();
     private EditorViewModel editorViewModel;
 

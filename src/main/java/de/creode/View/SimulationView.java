@@ -22,6 +22,8 @@ import java.util.List;
 public class SimulationView extends Pane {
     private static final int C_HEIGHT = 900;
     private static final int C_WIDTH = 800;
+    private int boardHeight = 25;
+    private int boardWidth = 25;
     private Canvas canvas;
     private Affine affine;
     private EventBus eventBus;
@@ -76,14 +78,18 @@ public class SimulationView extends Pane {
 
     private void setAffineScale(){
         this.affine = new Affine();
-        this.affine.appendScale(this.getWidth()/25.0, this.getHeight()/25.0);
+        this.affine.appendScale(this.getWidth()/boardWidth, this.getHeight()/boardHeight);
+    }
+
+    public void fetchBoardSize(int height, int width){
+        boardWidth = width;
+        boardHeight = height;
     }
 
     public void draw(){
         GraphicsContext gc = this.canvas.getGraphicsContext2D();
         gc.setTransform(this.affine);
         fill(gc);
-
         for (IDrawLayer drawLayer : drawLayers) {
             drawLayer.draw(gc);
         }

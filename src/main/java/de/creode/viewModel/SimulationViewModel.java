@@ -4,6 +4,7 @@ import de.creode.logic.Simulation;
 import de.creode.model.ApplicationState;
 import de.creode.model.StandardRule;
 
+import de.creode.utilities.event.OptionsEvent;
 import de.creode.utilities.event.ToolBarEvent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -58,7 +59,15 @@ public class SimulationViewModel {
         }
     }
 
-    private void reset() {
+    public void handle(OptionsEvent optionsEvent){
+        switch (optionsEvent.getType()){
+            case GRID_SIZE:
+                this.reset();
+                break;
+        }
+    }
+
+    public void reset() {
         this.applicationViewModel.getProperty().set(ApplicationState.EDITING);
         this.simulation = new Simulation(boardViewModel.getBoardProperty().get(), new StandardRule());
     }

@@ -1,8 +1,8 @@
 package de.creode.model;
 
+import de.creode.model.board.Board;
+import de.creode.model.board.BoundedBoard;
 import org.junit.jupiter.api.BeforeEach;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class StandardRuleTest {
 

@@ -1,20 +1,19 @@
 package de.creode;
 
-import de.creode.View.Infobar;
-import de.creode.View.MainView;
-import de.creode.View.SimulationView;
-import de.creode.View.Toolbar;
-import de.creode.model.BoardDrawLayer;
-import de.creode.model.BoundedBoard;
-import de.creode.model.GridDrawLayer;
-import de.creode.model.HighlightDrawLayer;
+import de.creode.View.*;
+import de.creode.model.board.BoardDrawLayer;
+import de.creode.model.board.BoundedBoard;
+import de.creode.model.board.GridDrawLayer;
+import de.creode.model.board.HighlightDrawLayer;
 import de.creode.utilities.event.EventBus;
 import de.creode.utilities.event.MyMouseEvent;
+import de.creode.utilities.event.OptionsEvent;
 import de.creode.utilities.event.ToolBarEvent;
 import de.creode.viewModel.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 
 public class App extends Application{
@@ -45,10 +44,10 @@ public class App extends Application{
         boardViewModel.getBoardProperty().listen(board ->{boardDrawLayer.notifyListener();});
 
         SimulationView simulationView = new SimulationView(eventBus);
-
         simulationView.addDrawLayer(boardDrawLayer);
         simulationView.addDrawLayer(gridDrawLayer);
         simulationView.addDrawLayer(highlightDrawLayer);
+        boardViewModel.getBoardProperty().listen(board -> simulationView.fetchBoardSize(board.getHeigth(), board.getWidth()));
 
         eventBus.listen(ToolBarEvent.class, simulationViewModel::handle);
         eventBus.listen(ToolBarEvent.class, editorViewModel::handle);
@@ -60,11 +59,19 @@ public class App extends Application{
 
         eventBus.listen(MyMouseEvent.class, editorViewModel::handle);
 
+        OptionsView optionsView = new OptionsView(eventBus);
+
+        eventBus.listen(OptionsEvent.class, boardViewModel::handle);
+        eventBus.listen(OptionsEvent.class, editorViewModel::handle);
+        eventBus.listen(OptionsEvent.class, simulationViewModel::handle);
+
+
         MainView mainView = new MainView();
         mainView.setPadding(new Insets(3.0));
         mainView.setTop(toolbar);
         mainView.setCenter(simulationView);
         mainView.setBottom(infobar);
+        mainView.setRight(optionsView);
 
         Scene scene = new Scene(mainView, 1200, 900);
         stage.setScene(scene);

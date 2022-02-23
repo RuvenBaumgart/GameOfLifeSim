@@ -1,6 +1,6 @@
 package de.creode.model;
 
-import javafx.scene.control.Cell;
+import de.creode.model.board.Board;
 
 public class StandardRule implements Rule{
 

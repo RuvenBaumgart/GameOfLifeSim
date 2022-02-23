@@ -1,11 +1,10 @@
 package de.creode;
 
 import de.creode.logic.Simulation;
-import de.creode.model.Board;
-import de.creode.model.BoundedBoard;
+import de.creode.model.board.Board;
+import de.creode.model.board.BoundedBoard;
 import de.creode.model.CellState;
 import de.creode.model.StandardRule;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

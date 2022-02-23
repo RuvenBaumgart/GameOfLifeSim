@@ -1,10 +1,12 @@
 de/creode/model/CellState.class
 de/creode/View/Toolbar.class
-de/creode/model/Board.class
-de/creode/model/BoardDrawLayer.class
+de/creode/model/board/GridDrawLayer.class
+de/creode/model/board/BoardDrawLayer.class
+de/creode/model/board/BoundedBoard.class
 de/creode/viewModel/ApplicationViewModel.class
 de/creode/logic/Simulation.class
 de/creode/model/IDrawLayerListener.class
+de/creode/model/board/HighlightDrawLayer.class
 de/creode/model/IDrawLayer.class
 de/creode/utilities/event/ToolBarEvent$Type.class
 module-info.class
@@ -13,9 +15,9 @@ de/creode/viewModel/BoardViewModel.class
 de/creode/viewModel/SimulationViewModel.class
 de/creode/utilities/Property.class
 de/creode/model/Rule.class
+de/creode/View/OptionsView.class
 de/creode/utilities/event/IEvent.class
 de/creode/utilities/event/MyMouseEvent.class
-de/creode/model/GridDrawLayer.class
 de/creode/utilities/event/MyMouseEvent$Type.class
 de/creode/utilities/event/IEventListener.class
 de/creode/utilities/ISimpleChangeListener.class
@@ -25,9 +27,9 @@ de/creode/model/CursorPosition.class
 de/creode/View/Infobar.class
 de/creode/viewModel/SimulationViewModel$1.class
 de/creode/viewModel/EditorViewModel.class
-de/creode/model/BoundedBoard.class
 de/creode/View/SimulationView.class
 de/creode/App.class
+de/creode/model/board/Board.class
 de/creode/utilities/event/ToolBarEvent.class
 de/creode/View/MainView.class
 de/creode/utilities/event/EventBus.class

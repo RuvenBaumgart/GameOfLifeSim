@@ -1,6 +1,6 @@
 package de.creode.logic;
 
-import de.creode.model.Board;
+import de.creode.model.board.Board;
 import de.creode.model.Rule;
 
 public class Simulation {

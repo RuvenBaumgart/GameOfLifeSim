@@ -1,4 +1,6 @@
-package de.creode.model;
+package de.creode.model.board;
+
+import de.creode.model.CellState;
 
 public class BoundedBoard implements Board{
     private int height;

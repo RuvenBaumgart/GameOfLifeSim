@@ -1,5 +1,7 @@
-package de.creode.model;
+package de.creode.model.board;
 
+import de.creode.model.IDrawLayer;
+import de.creode.model.IDrawLayerListener;
 import de.creode.viewModel.BoardViewModel;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -7,41 +9,41 @@ import javafx.scene.paint.Color;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BoardDrawLayer implements IDrawLayer{
+public class GridDrawLayer implements IDrawLayer {
 
     private List<IDrawLayerListener> listeners = new LinkedList<>();
     private BoardViewModel boardViewModel;
 
-    public BoardDrawLayer(BoardViewModel boardViewModel){
+    public GridDrawLayer(BoardViewModel boardViewModel){
         this.boardViewModel = boardViewModel;
     }
 
     @Override
     public void draw(GraphicsContext gc) {
-        Board board = boardViewModel.getBoardProperty().get();
-        gc.setFill(Color.BLACK);
-        for (int i = 0; i < board.getHeigth() ; i++) {
-            for (int j = 0; j < board.getWidth(); j++) {
-                if (board.getState(i, j) == CellState.ALIVE) {
-                    gc.fillRect(i, j, 1, 1);
-                }
-            }
+        Board board = this.boardViewModel.getBoardProperty().get();
+        gc.setStroke(Color.GRAY);
+        gc.setLineWidth(0.05d);
+        for (int i = 0; i <= board.getHeigth(); i++) {
+            gc.strokeLine(i,0, i, board.getWidth());
+        }
+
+        for (int i = 0; i <= board.getWidth(); i++) {
+            gc.strokeLine(0, i, board.getWidth(), i);
         }
     }
 
     @Override
     public int getLayer() {
-        return 1;
+        return 10;
     }
 
     @Override
     public void addListener(IDrawLayerListener listener) {
-        this.listeners.add(listener);
+        listeners.add(listener);
     }
 
     @Override
     public void notifyListener() {
         listeners.forEach(IDrawLayerListener::isInvalid);
     }
-
 }

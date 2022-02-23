@@ -1,7 +1,7 @@
 package de.creode.model;
 
-import de.creode.model.Board;
-import de.creode.model.BoundedBoard;
+import de.creode.model.board.Board;
+import de.creode.model.board.BoundedBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
