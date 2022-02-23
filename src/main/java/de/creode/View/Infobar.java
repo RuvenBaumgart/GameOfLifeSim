@@ -2,6 +2,7 @@ package de.creode.View;
 
 import de.creode.model.CellState;
 import de.creode.model.CursorPosition;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -17,7 +18,9 @@ public class Infobar extends HBox {
     public Infobar() {
 
         this.cursor = new Label();
+        cursor.setPadding(new Insets(5.0));
         this.editingTool = new Label();
+        editingTool.setPadding(new Insets(5.0));
 
         Pane spacer = new Pane();
         spacer.setMinSize(0,0);
