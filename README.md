@@ -1,4 +1,6 @@
 # Conveys Game of Life Simulator
+
+![Game Of Life by ruven baumgart](game_of_life.png)
 ## Introduction
 I am a big fan of Robert C. Martins books and blog. Also, I love to do Code-Katas and Challenges. 
 When I then read about the challange to implement Conway's Game of Life based on TDD in a Code-Challenge format in one of
@@ -42,6 +44,7 @@ To enter the Editing State you need
 to reset or resize the board.
 
 # Run the Application
+
 ###Build
 
 You can clone the repo and run it in you favorite IDE. I have used Intellij. 
