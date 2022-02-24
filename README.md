@@ -43,7 +43,10 @@ to reset or resize the board.
 
 # Run the Application
 ###Build
-There is no target folder within this repo so you need to clone the code and do a rebuild. JavaFx should be available on your machine
+
+You can clone the repo and run it in you favorite IDE. I have used Intellij. 
+If you want to run it without ide you need to do a rebuild. 
+If you have the javafx plugin you can use the following command to build the project with a java runtime.
 * *mvn clean javafx:jlink* to build.
 ###Run
 After you have build the project you need to move to the target folder and navigate over the image to the bin folder
