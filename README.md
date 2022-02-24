@@ -43,15 +43,15 @@ to reset or resize the board.
 
 # Run the Application
 ###Build
-If you have cloned or downloaded the code there should be no need to rebuild. If you have adjusted the code please use
+There is no target folder within this repo so you need to clone the code and do a rebuild. JavaFx should be available on your machine
 * *mvn clean javafx:jlink* to build.
 ###Run
-Go to the target folder and navigate over the image to the bin folder
+After you have build the project you need to move to the target folder and navigate over the image to the bin folder
 * */target/images/bin/*
 * use the following command to start the app
   * *./java -m de.creode/de.creode.App*
 
-you need to specify the module and the main app. So if your are changing the structure or the naming please adjust the comment.
+You need to specify the module and the main app. So if your are changing the structure or the naming please adjust the comment.
 
 
 ### Conclusion
