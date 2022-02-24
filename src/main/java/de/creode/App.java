@@ -1,3 +1,14 @@
+/*
+ * This App is developed by Ruven Baumgart www.creode.de.
+ *
+ * The Idea of creating this app and make use of various programming techniques like TDD and VVMM
+ * was based on Robert C. Martins book "The Clean Coder" where I have reading about Conways Game of Life
+ * https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life was used as a Coding-Kata.
+ * Byte Smith Video Series was also a great resource of inspiration and knowledge how to code Conways game of life.
+ *
+ *
+ */
+
 package de.creode;
 
 import de.creode.View.*;
@@ -13,7 +24,7 @@ import de.creode.viewModel.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Slider;
+
 import javafx.stage.Stage;
 
 public class App extends Application{
@@ -23,55 +34,58 @@ public class App extends Application{
 
     @Override
     public void start(Stage stage) {
+        /*
+         * Initialization of all components.
+         * The concept of application context can be used but for now i will leave the init functions here
+         */
         EventBus eventBus = new EventBus();
-
         ApplicationViewModel applicationViewModel = new ApplicationViewModel();
-
         BoardViewModel boardViewModel = new BoardViewModel();
         BoundedBoard boundedBoard = new BoundedBoard(B_HEIGHT, B_WIDTH);
         boardViewModel.getBoardProperty().set(boundedBoard);
-
         EditorViewModel editorViewModel = new EditorViewModel(boardViewModel);
-
         SimulationViewModel simulationViewModel = new SimulationViewModel(boardViewModel, applicationViewModel);
-
-        applicationViewModel.getProperty().listen(editorViewModel::onAppStateChanged);
-
-
         Infobar infobar = new Infobar();
-        applicationViewModel.getProperty().listen(infobar::displayState);
-
         Toolbar toolbar = new Toolbar(eventBus);
-
         BoardDrawLayer boardDrawLayer = new BoardDrawLayer(boardViewModel);
         GridDrawLayer gridDrawLayer = new GridDrawLayer(boardViewModel);
         HighlightDrawLayer highlightDrawLayer = new HighlightDrawLayer(editorViewModel);
-
-        boardViewModel.getBoardProperty().listen(board ->{boardDrawLayer.notifyListener();});
-
         SimulationView simulationView = new SimulationView(eventBus);
         simulationView.addDrawLayer(boardDrawLayer);
         simulationView.addDrawLayer(gridDrawLayer);
         simulationView.addDrawLayer(highlightDrawLayer);
-        boardViewModel.getBoardProperty().listen(board -> simulationView.fetchBoardSize(board.getHeigth(), board.getWidth()));
-
-        eventBus.listen(ToolBarEvent.class, simulationViewModel::handle);
-        eventBus.listen(ToolBarEvent.class, editorViewModel::handle);
-
-        editorViewModel.getCellStateProperty().listen(infobar::displayMode);
-        editorViewModel.getCursorPositionProperty().listen(infobar::setCursorPosFormat);
-
-        editorViewModel.getCursorPositionProperty().listen(board ->{boardDrawLayer.notifyListener();});
-
-        eventBus.listen(MyMouseEvent.class, editorViewModel::handle);
-
         OptionsView optionsView = new OptionsView(eventBus);
 
+        /*
+         * Connecting the Views and the ViewModels
+         */
+
+        /*
+         * Eventbus listeners
+         */
+        eventBus.listen(MyMouseEvent.class, editorViewModel::handle);
+        eventBus.listen(ToolBarEvent.class, simulationViewModel::handle);
+        eventBus.listen(ToolBarEvent.class, editorViewModel::handle);
         eventBus.listen(OptionsEvent.class, boardViewModel::handle);
         eventBus.listen(OptionsEvent.class, editorViewModel::handle);
         eventBus.listen(OptionsEvent.class, simulationViewModel::handle);
 
+        /*
+         * Listeners to the change of Properties
+         */
+        applicationViewModel.getProperty().listen(editorViewModel::onAppStateChanged);
+        applicationViewModel.getProperty().listen(infobar::displayState);
+        boardViewModel.getBoardProperty().listen(board ->{boardDrawLayer.notifyListener();});
+        boardViewModel.getBoardProperty().listen(board -> simulationView.fetchBoardSize(board.getHeigth(), board.getWidth()));
+        editorViewModel.getCellStateProperty().listen(infobar::displayMode);
+        editorViewModel.getCursorPositionProperty().listen(infobar::setCursorPosFormat);
+        editorViewModel.getCellStateProperty().listen(infobar::displayMode);
+        editorViewModel.getCursorPositionProperty().listen(infobar::setCursorPosFormat);
+        editorViewModel.getCursorPositionProperty().listen(board ->{boardDrawLayer.notifyListener();});
 
+        /*
+         * Setting up the Main BorderPane View
+         */
         MainView mainView = new MainView();
         mainView.setPadding(new Insets(3.0));
         mainView.setTop(toolbar);
@@ -80,13 +94,11 @@ public class App extends Application{
         mainView.setRight(optionsView);
 
         Scene scene = new Scene(mainView, 1200, 900);
-
         String stylesheet = getClass().getResource("/styles.css").toExternalForm();
         scene.getStylesheets().add(stylesheet);
 
         stage.setScene(scene);
         stage.show();
-        boardViewModel.getBoardProperty().set(boundedBoard);
     }
 
 
