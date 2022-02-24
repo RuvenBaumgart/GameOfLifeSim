@@ -52,7 +52,8 @@ public class SimulationViewModel {
 
 
     public void stop(){
-        this.timeline.stop();
+        if(this.timeline != null)
+            this.timeline.stop();
     }
 
 

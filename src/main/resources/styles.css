@@ -1,0 +1,19 @@
+.cursorLabel{
+    -fx-font-size: 20 px ;
+}
+
+.editingStatus{
+    -fx-font-size: 20 px ;
+}
+
+.gridLabel{
+    -fx-font-size: 16 px ;
+}
+
+.speedLabel{
+    -fx-font-size: 16 px ;
+}
+
+.appStateLabel{
+    -fx-font-size: 20 px;
+}

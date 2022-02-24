@@ -26,15 +26,21 @@ public class App extends Application{
         EventBus eventBus = new EventBus();
 
         ApplicationViewModel applicationViewModel = new ApplicationViewModel();
+
         BoardViewModel boardViewModel = new BoardViewModel();
         BoundedBoard boundedBoard = new BoundedBoard(B_HEIGHT, B_WIDTH);
         boardViewModel.getBoardProperty().set(boundedBoard);
 
         EditorViewModel editorViewModel = new EditorViewModel(boardViewModel);
+
         SimulationViewModel simulationViewModel = new SimulationViewModel(boardViewModel, applicationViewModel);
+
         applicationViewModel.getProperty().listen(editorViewModel::onAppStateChanged);
 
+
         Infobar infobar = new Infobar();
+        applicationViewModel.getProperty().listen(infobar::displayState);
+
         Toolbar toolbar = new Toolbar(eventBus);
 
         BoardDrawLayer boardDrawLayer = new BoardDrawLayer(boardViewModel);
@@ -74,6 +80,10 @@ public class App extends Application{
         mainView.setRight(optionsView);
 
         Scene scene = new Scene(mainView, 1200, 900);
+
+        String stylesheet = getClass().getResource("/styles.css").toExternalForm();
+        scene.getStylesheets().add(stylesheet);
+
         stage.setScene(scene);
         stage.show();
         boardViewModel.getBoardProperty().set(boundedBoard);

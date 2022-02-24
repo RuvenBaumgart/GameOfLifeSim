@@ -2,8 +2,6 @@ package de.creode.View;
 
 import de.creode.utilities.event.EventBus;
 import de.creode.utilities.event.OptionsEvent;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -21,6 +19,7 @@ public class OptionsView extends VBox {
         gridSizeSlider.setBlockIncrement(1);
 
         Label gridSizeLabel = new Label("Grid Size");
+        gridSizeLabel.getStyleClass().add("gridLabel");
 
         gridSizeSlider.valueProperty().addListener((observable, oldValue, newValue) -> this.handleGridSizeChanged((double)newValue));
 
@@ -31,6 +30,7 @@ public class OptionsView extends VBox {
         simulationSpeed.setBlockIncrement(5);
 
         Label speedLabel= new Label("Simulation Speed");
+        speedLabel.getStyleClass().add("speedLabel");
 
         simulationSpeed.valueProperty().addListener((observable, oldValue, newValue) -> this.handleSimulationSpeedChanged((double)newValue));
 
