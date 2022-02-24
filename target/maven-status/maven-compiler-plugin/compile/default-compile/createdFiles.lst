@@ -7,6 +7,7 @@ de/creode/viewModel/ApplicationViewModel.class
 de/creode/logic/Simulation.class
 de/creode/model/IDrawLayerListener.class
 de/creode/model/board/HighlightDrawLayer.class
+de/creode/utilities/event/OptionsEvent$Type.class
 de/creode/model/IDrawLayer.class
 de/creode/utilities/event/ToolBarEvent$Type.class
 module-info.class
@@ -20,6 +21,7 @@ de/creode/utilities/event/IEvent.class
 de/creode/utilities/event/MyMouseEvent.class
 de/creode/utilities/event/MyMouseEvent$Type.class
 de/creode/utilities/event/IEventListener.class
+de/creode/viewModel/BoardViewModel$1.class
 de/creode/utilities/ISimpleChangeListener.class
 de/creode/model/StandardRule.class
 de/creode/viewModel/EditorViewModel$1.class
@@ -30,6 +32,7 @@ de/creode/viewModel/EditorViewModel.class
 de/creode/View/SimulationView.class
 de/creode/App.class
 de/creode/model/board/Board.class
+de/creode/utilities/event/OptionsEvent.class
 de/creode/utilities/event/ToolBarEvent.class
 de/creode/View/MainView.class
 de/creode/utilities/event/EventBus.class

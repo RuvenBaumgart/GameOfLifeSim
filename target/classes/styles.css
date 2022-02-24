@@ -1,3 +1,7 @@
+* {
+   -fx-font-family: 'serif'
+}
+
 .cursorLabel{
     -fx-font-size: 20 px ;
 }
